@@ -1,0 +1,32 @@
+
+###
+GET http://127.0.0.1:5000/books/
+Accept: application/json
+
+###
+POST http://127.0.0.1:5000/books
+Content-Type: application/json
+
+{
+  "author": "余华1",
+  "book_name": "活着1",
+  "book_number": "003",
+  "book_prize": 39.9,
+  "book_publisher": "上海出版社",
+  "book_type": "小说1"
+}
+###
+PUT http://127.0.0.1:5000/books/3
+Content-Type: application/json
+
+{
+  "author": "余华2",
+  "book_name": "活着2",
+  "book_number": "004",
+  "book_prize": 39.9,
+  "book_publisher": "上海出版社",
+  "book_type": "小说2"
+}
+###
+DELETE http://127.0.0.1:5000/books/3
+Accept: application/json
