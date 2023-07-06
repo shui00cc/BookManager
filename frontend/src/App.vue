@@ -37,7 +37,7 @@
     id:"",
   })
 
-  //表单提交
+  //表单添加提交
   const submitForm = (formEl) => {
     axios.post('http://localhost:5000/books',book_form).then( () => {
       add_dialog_visible.value = false
@@ -60,6 +60,26 @@
     .catch(() => {
     });
   }
+
+  //表单编辑
+  const editFormRef = ref()
+  const edit_dialog_visible = ref(false)
+  const handleEdit = (index, scope) => {
+    for (let key in scope) {
+      book_form[key] = scope[key]
+    }
+    edit_dialog_visible.value = true
+  }
+
+  //表单编辑提交
+  const submitEditForm = (formEl) => {
+    axios.put(`http://localhost:5000/books/${book_form.id}`,book_form).then( () => {
+      edit_dialog_visible.value = false
+      formEl.resetFields()
+      getStudents()
+    })
+  }
+
 </script>
 
 <template>
@@ -74,7 +94,7 @@
       <el-table-column label="类型" prop="book_type" />
       <el-table-column label="价格" prop="book_prize" />
       <el-table-column label="作者" prop="author" />
-      <el-table-column label="出版社" prop="book_publisher" />
+      <el-table-column label="出版社" prop="book_publisher" width="100px"/>
       <el-table-column align="right" label="操作" width="200px">
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
@@ -127,6 +147,44 @@
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)">提交</el-button>
         <el-button @click="resetForm(ruleFormRef)" >重置</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
+  <!-- 编辑图书页面 -->
+  <el-dialog
+    title="编辑图书"
+    v-model="edit_dialog_visible"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <el-form
+      ref="editFormRef"
+      :model="book_form"
+      status-icon
+      lable-width="120px"
+      class="demo-ruleForm"
+    >
+      <el-form-item label="编号" prop="book_number">
+        <el-input v-model="book_form.book_number" autocomlete="off"/>
+      </el-form-item>
+      <el-form-item label="书名" prop="book_name">
+        <el-input v-model="book_form.book_name" autocomlete="off"/>
+      </el-form-item>
+      <el-form-item label="类型" prop="book_type">
+        <el-input v-model="book_form.book_type" autocomlete="off"/>
+      </el-form-item>
+      <el-form-item label="价格" prop="book_prize">
+        <el-input v-model="book_form.book_prize" autocomlete="off"/>
+      </el-form-item>
+      <el-form-item label="作者" prop="author">
+        <el-input v-model="book_form.author" autocomlete="off"/>
+      </el-form-item>
+      <el-form-item label="出版社" prop="book_publisher">
+        <el-input v-model="book_form.book_publisher" autocomlete="off"/>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitEditForm(editFormRef)">提交</el-button>
+        <el-button @click="resetForm(editFormRef)" >重置</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
